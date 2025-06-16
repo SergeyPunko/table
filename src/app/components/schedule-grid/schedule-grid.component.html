@@ -1,0 +1,63 @@
+<div class="w-full overflow-hidden bg-white py-2">
+  <div class="rounded-lg">
+    <!-- Header with day names and dates -->
+    <div class="bg-white">
+      <div class="flex overflow-hidden">
+        <div
+          class="w-16 flex-shrink-0 py-3 px-2 text-center text-sm font-medium text-gray-600 border-blue-200 bg-white">
+
+        </div>
+        <div #header class="flex flex-row  overflow-auto scrollbar-hide" (scroll)="onScrollSync($event, gridContainer)">
+          <div class="flex flex-row w-max">
+            <div *ngFor="let day of dayNames; let index = index"
+              class="py-3 px-2 text-center w-[240px] flex gap-1 items-center justify-center">
+              <div>
+                {{ weekDates[index] | date:'dd.MM' }}
+              </div>
+              <div>{{ day }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid container -->
+    <div style="height: 600px">
+      <div class="flex relative h-full">
+        <!-- Time column -->
+        <div #timeColumn
+          class="w-16 flex-shrink-0 bg-white overflow-auto scrollbar-hide -my-2 py-2 bg-[linear-gradient(to_bottom,white,transparent_10px,transparent_calc(100%-10px),white)]"
+          (scroll)="onScrollSync($event, undefined, gridContainer)">
+          <div *ngFor="let slot of timeSlots; let index = index" class="h-[60px] relative">
+            <span class="font-medium absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              {{ slot.label }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Days columns -->
+        <div #gridContainer class="flex flex-row overflow-auto border border-blue-200 h-full"
+          (scroll)="onScrollSync($event, header, timeColumn)">
+          <div class="flex flex-row w-max h-max relative">
+            <div *ngFor="let day of dayNames; let dayIndex = index" class="relative w-[240px]">
+              <!-- Time slot backgrounds -->
+              <div *ngFor="let slot of timeSlots; let slotIndex = index"
+                class="h-[60px] border border-blue-200 w-[240px]"></div>
+
+              <!-- Training cards -->
+              <div *ngFor="let layout of allLayouts[dayIndex] || []" class="absolute  hover:!z-100"
+                [style.top.px]="layout.top" [style.height.px]="layout.height" [style.width.px]="layout.width"
+                [style.left.px]="layout.left" [style.z-index]="layout.zIndex">
+                <app-training-card [training]="layout.training" (edit)="onEditTraining($event)"
+                  (viewClients)="onViewClients($event)"></app-training-card>
+              </div>
+            </div>
+
+            <!-- Current time line -->
+            <app-current-time-line [position]="currentTimePosition"></app-current-time-line>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

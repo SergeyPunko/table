@@ -1,0 +1,6 @@
+<div class="mb-6">
+  <div class="flex w-max items-center rounded-lg overflow-hidden" style="box-shadow: var(--tui-shadow-small);">
+    <app-filter *ngFor="let filter of filterOptions; trackBy: trackByFn" [items]="filter.options" [value]="filter.value"
+      (valueChange)="filter.onChange($event)" [label]="filter.label" />
+  </div>
+</div>
