@@ -1,13 +1,13 @@
 <div class="relative">
-  <button class="w-full flex items-center gap-2 justify-between px-4 py-2 hover:bg-gray-50 cursor-pointer"
+  <button class="w-full flex items-center gap-2 justify-between px-4 py-2 hover:bg-gray-50 cursor-pointer rounded-lg"
     (click)="toggleDropdown()">
     {{label}}
-    <lucide-icon *ngIf="!isOpen" name="chevron-down" class="w-4 h-4 text-gray-500"></lucide-icon>
-    <lucide-icon *ngIf="isOpen" name="chevron-up" class="w-4 h-4 text-gray-500"></lucide-icon>
+    <lucide-icon *ngIf="!isOpen" name="chevron-down" class="w-4 h-4 text-gray-500 pointer-events-none"></lucide-icon>
+    <lucide-icon *ngIf="isOpen" name="chevron-up" class="w-4 h-4 text-gray-500 pointer-events-none"></lucide-icon>
   </button>
 
   <ul *ngIf="isOpen"
-    class="absolute z-10 mt-1 w-max bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
+    class="absolute z-10 mt-1 w-max min-w-36 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
     <li *ngFor="let item of items" (click)="selectItem(item)"
       class="px-4 py-2 flex items-center justify-between gap-2 cursor-pointer hover:bg-gray-100">
       {{ item.label }}

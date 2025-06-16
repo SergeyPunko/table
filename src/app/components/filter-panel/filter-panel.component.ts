@@ -32,14 +32,15 @@ export class FilterPanelComponent {
         value: this.filters.date || '',
         options: [
           { value: '', label: 'Все даты' },
-          { value: 'today', label: 'Сегодня' },
-          { value: 'tomorrow', label: 'Завтра' },
-          { value: 'week', label: 'Эта неделя' }
+          { value: '0', label: 'Понедельник' },
+          { value: '1', label: 'Вторник' },
+          { value: '2', label: 'Среда' },
+          { value: '3', label: 'Четверг' },
+          { value: '4', label: 'Пятница' },
+          { value: '5', label: 'Суббота' },
+          { value: '6', label: 'Воскресенье' },
         ],
-        onChange: (value: string) => {
-          console.log('onChange', value);
-          this.updateFilter('date', value)
-        }
+        onChange: (value: string) => this.updateFilter('date', value)
       },
       {
         label: 'Услуга',
@@ -109,7 +110,6 @@ export class FilterPanelComponent {
 
   private updateFilter<K extends keyof FilterState>(key: K, value: FilterState[K]) {
     this.filtersChange.emit({ ...this.filters, [key]: value });
-    console.log('updateFilter', key, value);
     this.cdr.detectChanges();
   }
 

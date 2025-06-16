@@ -1,9 +1,6 @@
 import { CommonModule, NgForOf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiButton, TuiDataList, TuiDropdown, TuiIcon, TuiOptionNew, TuiSizeL, TuiSizeS } from '@taiga-ui/core';
-import { TuiCheckbox, TuiChevron, TuiDataListWrapper, TuiSwitch, tuiItemsHandlersProvider } from '@taiga-ui/kit';
-import { TuiMultiSelectModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 
 interface Option {
@@ -37,7 +34,6 @@ export class FilterComponent {
     this.value = item.value;
     this.isOpen = false;
     this.valueChange.emit(item.value);
-    console.log('Выбран элемент:', item);
   }
 
   toggleDropdown() {

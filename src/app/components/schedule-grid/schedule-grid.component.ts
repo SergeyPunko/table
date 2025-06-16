@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Training, FilterState } from '../../types/schedule';
-import { generateTimeSlots, getCurrentTimePosition, getAutoScrollPosition } from '../../utils/time-utils';
+import { generateTimeSlots, getCurrentTimePosition, getAutoScrollPosition, timeToMinutes } from '../../utils/time-utils';
 import { calculateCardLayouts } from '../../utils/collision-utils';
 import { TrainingCardComponent } from '../training-card/training-card.component';
 import { CurrentTimeLineComponent } from '../current-time-line/current-time-line.component';
@@ -86,6 +86,9 @@ export class ScheduleGridComponent implements OnInit, OnDestroy, AfterViewInit {
         const available = training.maxCapacity - training.currentOccupancy;
         if (available < this.filters.availableSpots) return false;
       }
+      if ((this.filters.date !== '' && this.filters.date !== undefined) && training.day !== Number(this.filters.date)) return false;
+
+      if (this.filters.duration && timeToMinutes(training.endTime) - timeToMinutes(training.startTime) !== this.filters.duration) return false;
       return true;
     });
   }

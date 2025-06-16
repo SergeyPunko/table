@@ -50,7 +50,6 @@ export class AppComponent {
 
   onFiltersChange(filters: FilterState) {
     this.filters = filters;
-    console.log(this.filters);
   }
 
   handleEditTraining(training: Training) {
