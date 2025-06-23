@@ -1,58 +1,49 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
-import { Training } from '../../types/schedule';
-import { getColorVariants, getOccupancyColor } from '../../utils/color-utils';
-import { timeToMinutes } from '../../utils/time-utils';
+import { Spot } from '../../types/schedule';
+import { generateHslColor, getColorVariants, getOccupancyColorClass } from '../../utils/color-utils';
+import { MINUTES_IN_HOUR } from '@taiga-ui/cdk/date-time';
+import { TuiButton, TuiIcon } from '@taiga-ui/core';
+import { TuiBadge } from '@taiga-ui/kit';
+import { TimeService } from '../../services/time.service';
 
 @Component({
   selector: 'app-training-card',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, TuiBadge, TuiButton],
   templateUrl: './training-card.component.html',
+  styleUrl: './training-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrainingCardComponent {
-  @Input() training!: Training;
-  @Output() edit = new EventEmitter<Training>();
-  @Output() viewClients = new EventEmitter<Training>();
+  training = input.required<Spot>();
+  edit = output<Spot>();
+  viewClients = output<Spot>();
+
+  private timeService = inject(TimeService);
 
   get durationInMinutes(): number {
-    const start = timeToMinutes(this.training.startTime);
-    const end = timeToMinutes(this.training.endTime);
-    return end - start;
+    return (this.training().endTime - this.training().startTime) / (MINUTES_IN_HOUR * 1000);
   }
 
   get colors() {
-    return getColorVariants(this.training.color || '220, 60%, 70%');
+    return getColorVariants(generateHslColor(this.training().trainingId));
   }
 
-  get occupancyColor(): string {
-    return getOccupancyColor(this.training.currentOccupancy, this.training.maxCapacity);
+  get occupancyColorClass(): string {
+    return getOccupancyColorClass(this.training().registrationsCount, this.training().capacity);
   }
 
   get hasStarted(): boolean {
-    const now = new Date();
-    const currentTime = now.getHours() * 60 + now.getMinutes();
-    const [startHour, startMinute] = this.training.startTime.split(':').map(Number);
-    const trainingStartTime = startHour * 60 + startMinute;
-    return currentTime >= trainingStartTime;
-  }
-
-  getOccupancyBgColor(): string {
-    const percentage = (this.training.currentOccupancy / this.training.maxCapacity) * 100;
-
-    if (percentage < 50) return '#ef4444'; // red
-    if (percentage < 75) return '#eab308'; // yellow
-    return '#22c55e'; // green
+    return this.timeService.hasStarted(this.training().startTime)
   }
 
   onEdit(event: Event) {
     event.stopPropagation();
-    this.edit.emit(this.training);
+    this.edit.emit(this.training());
   }
 
   onViewClients() {
-    this.viewClients.emit(this.training);
+    this.viewClients.emit(this.training());
   }
 }

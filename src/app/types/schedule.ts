@@ -1,18 +1,3 @@
-export interface Training {
-  id: string;
-  name: string;
-  startTime: string; // HH:MM format
-  endTime: string;
-  day: number; // 0-6 (Monday-Sunday)
-  trainer?: string;
-  location?: string;
-  maxCapacity: number;
-  currentOccupancy: number;
-  service: string;
-  sportType: string;
-  color?: string;
-}
-
 export interface TimeSlot {
   hour: number;
   minute: number;
@@ -35,4 +20,44 @@ export interface CardPosition {
   width: number;
   left: number;
   zIndex: number;
+}
+
+export interface Coach {
+  id: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  fullName: string;
+}
+
+export interface Hall {
+  id: string;
+  name: string;
+}
+
+export interface HallZone {
+  id: string;
+  name: string;
+}
+
+export interface Spot {
+  trainingId: string;
+  trainingName: string;
+  startTime: number;
+  endTime: number;
+  capacity: number;
+  registrationsCount: number;
+  hall: Hall;
+  hallZones: HallZone[];
+  coaches: Coach[];
+}
+
+export interface DaySchedule {
+  date: number;
+  dayOfWeek: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+  spots: Spot[];
+}
+
+export interface TrainingSchedule {
+  days: DaySchedule[];
 }

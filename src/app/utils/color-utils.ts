@@ -1,7 +1,21 @@
-export function generateRandomHSL(): string {
-  const hue = Math.floor(Math.random() * 360);
-  const saturation = 45 + Math.floor(Math.random() * 25); // 45-70%
-  const lightness = 65 + Math.floor(Math.random() * 15); // 65-80%
+export function generateHslColor(id?: string): string {
+  if (!id) {
+    const hue = Math.floor(Math.random() * 360);
+    const saturation = 45 + Math.floor(Math.random() * 25);
+    const lightness = 65 + Math.floor(Math.random() * 15);
+    return `${hue}, ${saturation}%, ${lightness}%`;
+  }
+
+  const lastSixChars = id.slice(-6).padStart(6, '0');
+
+  const part1 = parseInt(lastSixChars.substring(0, 2), 16) || 0;
+  const part2 = parseInt(lastSixChars.substring(2, 4), 16) || 0;
+  const part3 = parseInt(lastSixChars.substring(4, 6), 16) || 0;
+
+  const hue = Math.floor((part1 / 255) * 360);
+  const saturation = 45 + Math.floor((part2 / 255) * 25);
+  const lightness = 65 + Math.floor((part3 / 255) * 15);
+
   return `${hue}, ${saturation}%, ${lightness}%`;
 }
 
@@ -12,16 +26,15 @@ export function getColorVariants(baseHSL: string) {
   return {
     header: `hsl(${hue}, ${sat}%, 74%)`,
     background: `hsl(${hue}, ${sat}%, 98%)`,
-    timeBackground: `hsl(${hue}, ${sat}%, 93%)`,
-    text: `hsl(${hue}, ${sat}%, 57%)`,
-    border: `hsl(${hue}, ${sat}%, 85%)`
+    timeBackground: `hsl(${hue}, ${sat}%, 85%)`,
+    text: `hsl(${hue}, ${sat}%, 35%)`,
   };
 }
 
-export function getOccupancyColor(occupancy: number, maxCapacity: number): string {
+export function getOccupancyColorClass(occupancy: number, maxCapacity: number): string {
   const percentage = (occupancy / maxCapacity) * 100;
 
-  if (percentage < 50) return 'bg-red-500';
-  if (percentage < 75) return 'bg-yellow-500';
-  return 'bg-green-500';
+  if (percentage < 50) return 'red';
+  if (percentage < 75) return 'yellow';
+  return 'green';
 }

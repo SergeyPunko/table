@@ -1,94 +1,61 @@
-<div class="cursor-pointer transition-all duration-200 hover:scale-[1.02] h-full" [class.grayscale]="hasStarted"
-  (click)="onViewClients()">
-  <div *ngIf="durationInMinutes <= 15"
-    class="h-full shadow-md rounded-md p-2 text-white text-xs flex flex-row items-center"
-    [style.background-color]="colors.header">
-    <div class="flex justify-between items-center flex-col">
-      <div class="opacity-90">{{ training.startTime }}</div>
-      <div class="opacity-90">{{ training.endTime }}</div>
+<div class="training-card" [class.grayscale]="hasStarted" (click)="onViewClients()"
+  [style.--header-color]="colors.header" [style.--background-color]="colors.background"
+  [style.--text-color]="colors.text" [style.--time-background-color]="colors.timeBackground">
+  <div *ngIf="durationInMinutes <= 15" class="training-card__inner training-card__inner--short">
+    <div class="time">
+      <span>{{ training().startTime | date:'HH:mm' }}</span>
+      <span>{{ training().endTime | date:'HH:mm' }}</span>
     </div>
-    <div class="font-medium truncate flex-1 text-center" [title]="training.name">{{ training.name }}</div>
-    <div class="flex items-center flex-col justify-center leading-[8px]">
-      <span>{{ training.currentOccupancy }}</span>
-      <span> — </span>
-      <span>{{ training.maxCapacity }}</span>
+    <div class="name" [title]="training().trainingName">{{ training().trainingName }}</div>
+    <div class="occupancy">
+      <span>{{ training().registrationsCount }}</span>
+      <span class="separator"></span>
+      <span>{{ training().capacity }}</span>
     </div>
   </div>
 
   <div *ngIf="durationInMinutes > 15 && durationInMinutes <= 30"
-    class="h-full rounded-md text-white text-xs flex flex-col items-center shadow-md overflow-hidden"
-    [style.background-color]="colors.header">
-    <div class="px-2 py-1 flex items-center justify-between text-white">
-      <h3 class="font-medium text-xs truncate pr-1" [title]="training.name">{{ training.name }}</h3>
+    class="training-card__inner training-card__inner--medium">
+    <div class="training-card__header">
+      <h3 class="name" [title]="training().trainingName">{{ training().trainingName }}</h3>
     </div>
-
-    <div class="flex items-center gap-1 w-full flex-1 flex-wrap justify-between"
-      [style.background-color]="colors.background">
-      <div class="px-2 pb-1">
-        <div class="inline-block px-1.5 py-0.5 rounded text-xs font-medium" [style.color]="colors.text"
-          [style.background-color]="colors.timeBackground">
-          {{ training.startTime }}-{{ training.endTime }}
-        </div>
-      </div>
-
-      <!-- Occupancy badge -->
-      <div class="px-2 pb-1">
-        <div class="flex items-center gap-1">
-          <span class="inline-block px-1.5 py-0.5 rounded text-xs font-medium text-white"
-            [style.background-color]="getOccupancyBgColor()">
-            {{ training.currentOccupancy }} из {{ training.maxCapacity }}
-          </span>
-        </div>
+    <div class="training-card__body">
+      <div class="row">
+        <tui-badge class="time-badge">{{ training().startTime | date:'HH:mm' }}-{{
+          training().endTime | date:'HH:mm'
+          }}</tui-badge>
+        <tui-badge class="badge" [ngClass]="'badge__'+occupancyColorClass">
+          {{ training().registrationsCount }} из {{ training().capacity }}
+        </tui-badge>
       </div>
     </div>
-
   </div>
 
-  <!-- 60+ minutes content -->
-  <div *ngIf="durationInMinutes > 30" class="h-full flex flex-col rounded-md overflow-hidden shadow-md duration-200"
-    [style.background-color]="colors.header">
-    <!-- Header -->
-    <div class="px-2 py-1 flex items-center justify-between text-white">
-      <h3 class="font-medium text-xs truncate pr-1" [title]="training.name">{{ training.name }}</h3>
-      <button *ngIf="!hasStarted" (click)="onEdit($event)"
-        class="group p-0.5 hover:bg-white hover:bg-opacity-20 rounded transition-colors flex-shrink-0 cursor-pointer">
-        <lucide-icon name="edit-3" [size]="16"
-          class="text-white group-hover:text-gray-400 transition-colors"></lucide-icon>
+  <div *ngIf="durationInMinutes > 30" class="training-card__inner training-card__inner--long">
+    <div class="training-card__header">
+      <h3 class="name" [title]="training().trainingName">{{ training().trainingName }}</h3>
+      <button *ngIf="!hasStarted" (click)="onEdit($event)" appearance="flat" iconStart="@tui.pen-line" size="xs"
+        tuiIconButton type="button" class="edit-button">
       </button>
     </div>
-
-    <div class="flex flex-col flex-1 py-2" [style.background-color]="colors.background" [style.color]="colors.text">
-      <div class="flex gap-1 w-full flex-1 flex-wrap justify-between items-start">
-        <div class="px-2 pb-1">
-          <div class="inline-block px-1.5 py-0.5 rounded text-xs font-medium"
-            [style.background-color]=" colors.timeBackground">
-            {{ training.startTime }}-{{ training.endTime }}
-          </div>
-        </div>
-
-        <!-- Occupancy badge -->
-        <div class="px-2 pb-1">
-          <div class="flex items-center gap-1">
-            <span class="inline-block px-1.5 py-0.5 rounded text-xs font-medium text-white"
-              [style.background-color]="getOccupancyBgColor()">
-              {{ training.currentOccupancy }} из {{ training.maxCapacity }}
-            </span>
-          </div>
-        </div>
+    <div class="training-card__body">
+      <div class="row">
+        <tui-badge class="time-badge">{{ training().startTime | date:'HH:mm' }}-{{
+          training().endTime | date:'HH:mm'
+          }}</tui-badge>
+        <tui-badge class="badge" [ngClass]="'badge__'+occupancyColorClass">
+          {{ training().registrationsCount }} из {{ training().capacity }}
+        </tui-badge>
       </div>
 
-      <!-- Trainer info for longer sessions -->
-      <div *ngIf="training.trainer" class="px-2 pb-1">
-        <div class="text-xs opacity-90">
-          {{ training.trainer }}
-        </div>
+      <div *ngIf="training().coaches.length > 0" class="coach">
+        <ng-container *ngFor="let coach of training().coaches; let isLast = last">
+          <span>{{ coach.fullName }}</span><span *ngIf="!isLast">, </span>
+        </ng-container>
       </div>
 
-      <!-- Location info for 90+ min sessions -->
-      <div *ngIf="durationInMinutes >= 90 && training.location" class="px-2 pb-1">
-        <div class="text-xs opacity-80">
-          {{ training.location }}
-        </div>
+      <div *ngIf="durationInMinutes >= 90 && training().hall?.name" class="location">
+        <span>{{ training().hall.name }}</span>
       </div>
     </div>
   </div>

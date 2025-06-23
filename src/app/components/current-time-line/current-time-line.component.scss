@@ -1,0 +1,9 @@
+.time-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  pointer-events: none;
+  border-top: 2px dashed #4ade80; // border-green-400
+  opacity: 0.8;
+}

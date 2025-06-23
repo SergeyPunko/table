@@ -1,36 +1,4 @@
 <tui-root>
-  <div class="min-h-screen">
-    <!-- Top Navigation -->
-    <div class="bg-white border-b border-gray-200" style="box-shadow: var(--tui-shadow-small);">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="flex items-center gap-8 py-4">
-          <div class="flex items-center gap-2">
-            <lucide-icon name="zap" class="text-blue-600" [size]="24"></lucide-icon>
-          </div>
+  <app-schedule-grid [days]="mockTrainingSchedule.days"></app-schedule-grid>
 
-          <nav class="flex gap-6">
-            <button *ngFor="let tab of navigationTabs" [class]="getTabClasses(tab.active)">
-              {{ tab.name }}
-            </button>
-          </nav>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main content -->
-    <div class="max-w-7xl mx-auto mt-4 px-7 py-6 shadow-lg rounded-2xl" style="box-shadow: var(--tui-shadow-small);">
-      <app-filter-panel [filters]="filters" (filtersChange)="onFiltersChange($event)"
-        (addTraining)="handleAddTraining()"></app-filter-panel>
-
-      <app-schedule-grid [trainings]="trainings" [filters]="filters" (editTraining)="handleEditTraining($event)"
-        (viewClients)="handleViewClients($event)"></app-schedule-grid>
-    </div>
-
-    <!-- Modals -->
-    <app-edit-training-modal [training]="editingTraining" [isOpen]="isEditModalOpen" (close)="isEditModalOpen = false"
-      (save)="handleSaveTraining($event)"></app-edit-training-modal>
-
-    <app-clients-modal [training]="viewingClientsTraining" [isOpen]="isClientsModalOpen"
-      (close)="isClientsModalOpen = false"></app-clients-modal>
-  </div>
 </tui-root>

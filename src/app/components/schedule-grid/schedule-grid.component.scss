@@ -1,0 +1,153 @@
+.schedule-grid {
+  &__container {
+    width: 100%;
+    max-width: 80rem;
+    margin: 1rem auto 0;
+    padding: 2rem 1.75rem;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 0px 4px 20px 0px #0000000d;
+    border-radius: 1rem;
+  }
+
+  &__day-header,
+  &__time-label {
+    font-weight: 700;
+  }
+
+  &__wrapper {
+    border-radius: 0.5rem;
+  }
+
+  &__header-wrapper {
+    background-color: #fff;
+  }
+
+  &__header {
+    display: flex;
+    overflow: hidden;
+  }
+
+  &__corner {
+    width: 4rem;
+    flex-shrink: 0;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(75 85 99);
+    background-color: #fff;
+    border-color: rgb(191 219 254);
+  }
+
+  &__header-scroll {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+  }
+
+  &__header-days {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+  }
+
+  &__day-header {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+  }
+
+  &__content-wrapper {
+    height: 600px;
+  }
+
+  &__content {
+    display: flex;
+    position: relative;
+    height: 100%;
+  }
+
+  &__time-column {
+    width: 4rem;
+    flex-shrink: 0;
+    overflow: auto;
+    margin: -0.5rem 0;
+    padding: 0.5rem 0;
+    background-color: #fff;
+  }
+
+  &__time-slot {
+    position: relative;
+    height: 75px;
+  }
+
+  &__time-label {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &__grid-container {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    height: 100%;
+    border: 1px solid rgb(191 219 254);
+  }
+
+  &__grid-scroll {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: max-content;
+    height: max-content;
+  }
+
+  &__day-column {
+    position: relative;
+    width: 240px;
+  }
+
+  &__slot {
+    width: 240px;
+    height: 75px;
+    border: 1px solid rgb(191 219 254);
+  }
+
+  &__training-layout {
+    position: absolute;
+    background-color: var(--f-white-color);
+    border: 1px solid var(--f-gray-100-color);
+    border-radius: 8px;
+    min-height: 40px;
+    box-sizing: border-box;
+
+    --level: 1;
+    --index: 0;
+    --base_width: 230px;
+    --max_overlap: 100px;
+    --min_overlap: 40px;
+
+    --overlap: clamp(var(--min_overlap), var(--min_overlap) + 8px * (var(--level) - 2), var(--max_overlap));
+
+    --card-width: calc((var(--base_width) + (var(--level) - 1) * var(--overlap)) / var(--level));
+    --offsetBetween: calc(var(--card-width) - var(--overlap));
+
+    width: var(--card-width);
+    left: calc(var(--index) * var(--offsetBetween) + var(--slot-margin));
+
+    &:hover {
+      z-index: 100 !important;
+    }
+  }
+
+  &__training {
+    height: 100%;
+  }
+}

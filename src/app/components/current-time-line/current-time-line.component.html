@@ -1,6 +1,2 @@
-<div class="absolute left-0 right-0 z-30 pointer-events-none" [style.top.px]="topPosition">
-  <div class="relative">
-    <!-- Dashed line -->
-    <div class="border-t-2 border-green-400 border-dashed opacity-80"></div>
-  </div>
+<div class="time-line" [style.top]="`calc(${position()}px * var(--slot-height))`">
 </div>
