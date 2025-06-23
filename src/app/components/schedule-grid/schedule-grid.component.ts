@@ -6,11 +6,12 @@ import { CurrentTimeLineComponent } from '../current-time-line/current-time-line
 import { CollisionService } from '../../services/collision.service';
 import { TimeService } from '../../services/time.service';
 import { SLOT_HEIGHT } from '../../utils/constants';
+import { SlotComponent } from '../slot/slot.component';
 
 @Component({
   selector: 'app-schedule-grid',
   standalone: true,
-  imports: [CommonModule, TrainingCardComponent, CurrentTimeLineComponent],
+  imports: [CommonModule, TrainingCardComponent, CurrentTimeLineComponent, SlotComponent],
   styleUrl: './schedule-grid.component.scss',
   templateUrl: './schedule-grid.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +25,7 @@ export class ScheduleGridComponent implements OnDestroy, AfterViewInit {
   filters = input<FilterState>();
   editTraining = output<Spot>();
   viewClients = output<Spot>();
+  createTraining = output<{ day: number, slotStart: { hour: number; minute: number; label: string } }>();
 
   slotHeight = SLOT_HEIGHT;
 
@@ -62,6 +64,10 @@ export class ScheduleGridComponent implements OnDestroy, AfterViewInit {
     if (this.timeInterval) {
       clearInterval(this.timeInterval);
     }
+  }
+
+  onCreateTraining(day: number, slot: { hour: number; minute: number; label: string }) {
+    this.createTraining.emit({ day, slotStart: slot });
   }
 
   onEditTraining(training: Spot) {

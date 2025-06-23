@@ -30,7 +30,8 @@
         <div #gridContainer class="schedule-grid__grid-container" (scroll)="onScrollSync($event, header, timeColumn)">
           <div class="schedule-grid__grid-scroll">
             <div *ngFor="let day of days(); let dayIndex = index" class="schedule-grid__day-column">
-              <div *ngFor="let slot of timeSlots; let slotIndex = index" class="schedule-grid__slot"></div>
+              <app-slot *ngFor="let slot of timeSlots; let slotIndex = index"
+                (createTraining)="onCreateTraining(day.date, slot)"></app-slot>
 
               <div *ngFor="let layout of allLayouts()[dayIndex] || []" class="schedule-grid__training-layout"
                 [style.--level]="layout.level" [style.--index]="layout.index"
