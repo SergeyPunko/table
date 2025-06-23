@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, computed, input, output, viewChild, signal, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, computed, input, output, viewChild, signal, effect, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DaySchedule, FilterState, Spot } from '../../types/schedule';
 import { TrainingCardComponent } from '../training-card/training-card.component';
@@ -19,7 +19,7 @@ import { SLOT_HEIGHT } from '../../utils/constants';
     TimeService,
   ]
 })
-export class ScheduleGridComponent implements OnDestroy {
+export class ScheduleGridComponent implements OnDestroy, AfterViewInit {
   days = input.required<DaySchedule[]>();
   filters = input<FilterState>();
   editTraining = output<Spot>();
@@ -48,14 +48,14 @@ export class ScheduleGridComponent implements OnDestroy {
     this.timeInterval = window.setInterval(() => {
       this.currentTimePosition.set(this.timeService.getCurrentTimePosition());
     }, 60000);
+  }
 
-    effect(() => {
-      const gridContainer = this.gridContainer();
-      if (gridContainer) {
-        const scrollPosition = this.timeService.getAutoScrollPosition() * SLOT_HEIGHT;
-        gridContainer.nativeElement.scrollTop = scrollPosition;
-      }
-    });
+  ngAfterViewInit() {
+    const gridContainer = this.gridContainer();
+    if (gridContainer) {
+      const scrollPosition = this.timeService.getAutoScrollPosition() * SLOT_HEIGHT;
+      gridContainer.nativeElement.scrollTop = scrollPosition;
+    }
   }
 
   ngOnDestroy() {
